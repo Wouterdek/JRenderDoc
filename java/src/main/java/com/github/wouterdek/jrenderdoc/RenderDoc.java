@@ -19,7 +19,8 @@ public class RenderDoc {
 	 */
 	public static RenderDoc get(File renderdocLibrary){
 		if(instance == null){
-			instance = new RenderDoc(Natives.get().n_getApi(renderdocLibrary.getAbsolutePath()));
+			String path = renderdocLibrary == null ? null : renderdocLibrary.getAbsolutePath();
+			instance = new RenderDoc(Natives.get().n_getApi(path));
 		}
 		return instance;
 	}
