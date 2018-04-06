@@ -4,7 +4,7 @@ public class Capture {
 	private String filename;
 	private long unixTime;
 
-	public Capture(String filename, long unixTime){
+	Capture(String filename, long unixTime){
 		this.filename = filename;
 		this.unixTime = unixTime;
 	}

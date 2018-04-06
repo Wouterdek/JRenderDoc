@@ -8,18 +8,27 @@ import java.io.*;
 public class RenderDoc {
 	private static RenderDoc instance = null;
 
-	public static boolean isAttached(){
-		return Natives.get().n_isAttached();
+	/**
+	 * Returns the API singleton instance.
+	 * @param renderdocLibrary 
+	 * 	The location of renderdoc.dll on disk.
+	 *  The library must be build for the same platform as the JRE the current application is running on.
+	 *  For example: a 64-bit JRE requires a 64-bit library file.
+	 *  Some api functions may require a full RenderDoc installation to be present in the library folder.
+	 *  If this parameter is null, renderdoc.dll is assumed to be either already loaded or in the library search path.
+	 */
+	public static RenderDoc get(File renderdocLibrary){
+		if(instance == null){
+			instance = new RenderDoc(Natives.get().n_getApi(renderdocLibrary.getAbsolutePath()));
+		}
+		return instance;
 	}
 
 	/**
-	 * Returns the API singleton instance.
+	 * Returns the API singleton instance. Equivalent to calling get(null). 
 	 */
 	public static RenderDoc get(){
-		if(instance == null){
-			instance = new RenderDoc(Natives.get().n_getApi());
-		}
-		return instance;
+		return get(null);
 	}
 
 	private final long apiPtr;
@@ -154,18 +163,15 @@ public class RenderDoc {
 
 		private static void initNatives() throws IOException {
 			File libFile;
-			String arch = System.getProperty("os.arch");
-			switch(arch){
-				case "x86":
-				case "x86_32":
-					libFile = Utilities.extractResourceToTempFile("/renderdoc_wrapper_x32.dll", "renderdoc_wrapper_x32_", "dll");
+			switch(Architecture.getSystemArchitecture()){
+				case X86:
+					libFile = Utilities.extractResourceToTempFile("/renderdoc_wrapper_x86.dll", "renderdoc_wrapper_x86_", ".dll");
 					break;
-				case "amd64":
-				case "x86_64":
-					libFile = Utilities.extractResourceToTempFile("/renderdoc_wrapper_x64.dll", "renderdoc_wrapper_x64_", "dll");
+				case X64:
+					libFile = Utilities.extractResourceToTempFile("/renderdoc_wrapper_x64.dll", "renderdoc_wrapper_x64_", ".dll");
 					break;
 				default:
-					throw new RuntimeException("Unsupported architecture '"+arch+"'");
+					throw new RuntimeException("Unsupported architecture '"+System.getProperty("os.arch")+"'");
 			}
 
 			System.load(libFile.getAbsolutePath());
@@ -173,10 +179,8 @@ public class RenderDoc {
 
 		private Natives(){ }
 
-		private native boolean n_isAttached();
-
 		//int RENDERDOC_GetAPI(RENDERDOC_Version version, void **outAPIPointers)
-		private native long n_getApi() throws RuntimeException;
+		private native long n_getApi(String libPath) throws RuntimeException;
 
 		//void GetAPIVersion(int *major, int *minor, int *patch)
 		private native void n_getAPIVersion(long apiPtr, int[] buffer);

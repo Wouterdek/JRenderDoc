@@ -9,19 +9,11 @@ extern "C" {
 #endif
 /*
  * Class:     com_github_wouterdek_jrenderdoc_RenderDoc_Natives
- * Method:    n_isAttached
- * Signature: ()Z
- */
-JNIEXPORT jboolean JNICALL Java_com_github_wouterdek_jrenderdoc_RenderDoc_00024Natives_n_1isAttached
-  (JNIEnv *, jobject);
-
-/*
- * Class:     com_github_wouterdek_jrenderdoc_RenderDoc_Natives
  * Method:    n_getApi
- * Signature: ()J
+ * Signature: (Ljava/lang/String;)J
  */
 JNIEXPORT jlong JNICALL Java_com_github_wouterdek_jrenderdoc_RenderDoc_00024Natives_n_1getApi
-  (JNIEnv *, jobject);
+  (JNIEnv *, jobject, jstring);
 
 /*
  * Class:     com_github_wouterdek_jrenderdoc_RenderDoc_Natives

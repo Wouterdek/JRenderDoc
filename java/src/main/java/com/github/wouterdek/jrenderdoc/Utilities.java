@@ -2,7 +2,7 @@ package com.github.wouterdek.jrenderdoc;
 
 import java.io.*;
 
-public class Utilities {
+class Utilities {
 	private Utilities() { }
 
 	public static File extractResourceToTempFile(String resourcePath, String prefix, String suffix) throws IOException {
