@@ -3,12 +3,14 @@
 for %%X in (devenv.exe) do (set DEVENV_FOUND=%%~$PATH:X)
 if not defined DEVENV_FOUND (
     echo devenv.exe was not found. Make sure the Visual Studio developer tools are installed and in PATH
+    pause
     goto end
 )
 
 for %%X in (mvn.cmd) do (set MVN_FOUND=%%~$PATH:X)
 if not defined MVN_FOUND (
     echo mvn.cmd was not found. Make sure Maven is installed and in PATH
+    pause
     goto end
 )
 
